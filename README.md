@@ -1,70 +1,78 @@
-# Getting Started with Create React App
+import React, { useState } from "react";
+import Square from "./Square";
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+const Board = () => {
+const [state, setState] = useState(Array(9).fill(null));
+const [isXTurn, setIsXTurn] = useState(true);
 
-## Available Scripts
+const checkWinner = () => {
+const winnerLogic = [
+[0, 1, 2],
+[3, 4, 5],
+[6, 7, 8],
+[0, 3, 6],
+[1, 4, 7],
+[2, 5, 8],
+[0, 4, 8],
+[2, 4, 6],
+];
 
-In the project directory, you can run:
+    for (let logic of winnerLogic) {
+      const [a, b, c] = logic;
+      if (state[a] !== null && state[a] === state[b] && state[a] === state[c]) {
+        return state[a];
+      }
+    }
 
-### `npm start`
+    return false;
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+};
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+const isWinner = checkWinner();
 
-### `npm test`
+const handleClick = (index) => {
+if (state[index] !== null) {
+return;
+}
+const copyState = [...state];
+copyState[index] = isXTurn ? "X" : "O";
+setState(copyState);
+setIsXTurn(!isXTurn);
+};
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+const handleReset = () => {
+setState(Array(9).fill(null));
+};
 
-### `npm run build`
+return (
+<div className="board-container">
+{isWinner ? (
+<>
+{isWinner} won the game{" "}
+<button onClick={handleReset}>Play Again</button>
+</>
+) : (
+<>
+<h4>Player {isXTurn ? "X" : "O"} please move</h4>
+<div className="board-row">
+<Square onClick={() => handleClick(0)} value={state[0]} />
+<Square onClick={() => handleClick(1)} value={state[1]} />
+<Square onClick={() => handleClick(2)} value={state[2]} />
+</div>
+<div className="board-row">
+<Square onClick={() => handleClick(3)} value={state[3]} />
+<Square onClick={() => handleClick(4)} value={state[4]} />
+<Square onClick={() => handleClick(5)} value={state[5]} />
+</div>
+<div className="board-row">
+<Square onClick={() => handleClick(6)} value={state[6]} />
+<Square onClick={() => handleClick(7)} value={state[7]} />
+<Square onClick={() => handleClick(8)} value={state[8]} />
+</div>
+</>
+)}
+</div>
+);
+};
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+export default Board;
